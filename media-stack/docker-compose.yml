@@ -1,0 +1,16 @@
+name: cf-tunnel
+services:
+  cloudflare-tunnel:
+      image: cloudflare/cloudflared:latest
+      container_name: cf-tunnel
+      restart: unless-stopped
+      command: tunnel run
+      environment:
+        - TUNNEL_TOKEN=${CF_TUNNEL_TOKEN}
+      networks:
+        - tunnel
+
+networks:
+    tunnel:
+        name: tunnel
+        external: true
