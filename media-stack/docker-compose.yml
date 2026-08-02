@@ -1,16 +1,142 @@
-name: cf-tunnel
 services:
-  cloudflare-tunnel:
-      image: cloudflare/cloudflared:latest
-      container_name: cf-tunnel
-      restart: unless-stopped
-      command: tunnel run
-      environment:
-        - TUNNEL_TOKEN=${CF_TUNNEL_TOKEN}
-      networks:
-        - tunnel
+  jellyfin:
+    image: linuxserver/jellyfin:latest
+    container_name: jellyfin
+    runtime: nvidia
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Asia/Riyadh
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,video,utility
+    hostname: jellyfin
+    volumes:
+      - ./config/jellyfin:/config
+      - /mnt/media:/data
+      - /mnt/media/cache/jellyfin:/cache
+    ports:
+      - "8097:8096"
+    networks:
+      - tunnel
+
+  sonarr:
+    image: linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Asia/Riyadh
+    ports:
+      - "8989:8989"
+    hostname: sonarr
+    volumes:
+      - ./config/sonarr:/config
+      - /mnt/media:/data
+    networks:
+      - tunnel
+
+  radarr:
+    image: linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Asia/Riyadh
+    ports:
+      - "7878:7878"
+    hostname: radarr
+    volumes:
+      - ./config/radarr:/config
+      - /mnt/media:/data
+    networks:
+      - tunnel
+
+  bazarr:
+    image: linuxserver/bazarr:latest
+    container_name: bazarr
+    restart: unless-stopped
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Asia/Riyadh
+    ports:
+      - "6767:6767"
+    hostname: bazarr
+    volumes:
+      - ./config/bazarr:/config
+      - /mnt/media:/data
+    networks:
+      - tunnel
+
+  prowlarr:
+    image: linuxserver/prowlarr:latest
+    container_name: prowlarr
+    restart: unless-stopped
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Asia/Riyadh
+    ports:
+      - "9696:9696"
+    hostname: prowlarr
+    volumes:
+      - ./config/prowlarr:/config
+      - /mnt/media:/data
+    networks:
+      - tunnel
+
+  sabnzbd:
+    image: linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    restart: unless-stopped
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Asia/Riyadh
+    ports:
+      - "8282:8080"
+    hostname: sabnzbd
+    volumes:
+      - ./config/sabnzbd:/config
+      - /mnt/media:/data
+    networks:
+      - tunnel
+
+  seerr:
+    image: ghcr.io/seerr-team/seerr:latest
+    container_name: seerr
+    restart: unless-stopped
+    environment:
+      TZ: Asia/Riyadh
+    ports:
+      - "5055:5055"
+    hostname: seerr
+    volumes:
+      - ./config/seerr:/app/config
+    networks:
+      - tunnel
+
+  homarr:
+    image: ghcr.io/homarr-labs/homarr:latest
+    container_name: homarr
+    restart: unless-stopped
+    ports:
+      - "7575:7575"
+    environment:
+      TZ: Asia/Riyadh
+      SECRET_ENCRYPTION_KEY: 02aa7154b0c321c6b7dbaf73394944a2cf998fdebd68a1292176b53ff523b79a
+    hostname: homarr
+    volumes:
+      - ./config/homarr:/appdata
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    group_add:
+      - "983"
+    networks:
+      - tunnel
 
 networks:
-    tunnel:
-        name: tunnel
-        external: true
+  tunnel:
+    name: tunnel
+    external: true
