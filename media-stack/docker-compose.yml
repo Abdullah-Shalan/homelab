@@ -32,6 +32,7 @@ services:
     hostname: sonarr
     volumes:
       - ./config/sonarr:/config
+      - ./downloads:/downloads
       - /mnt/media:/data
     networks:
       - tunnel
@@ -49,6 +50,7 @@ services:
     hostname: radarr
     volumes:
       - ./config/radarr:/config
+      - ./downloads:/downloads
       - /mnt/media:/data
     networks:
       - tunnel
