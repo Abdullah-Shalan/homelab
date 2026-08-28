@@ -28,16 +28,7 @@ Each service directory may contain:
 | cloudflared | Cloudflare Tunnel |
 | ... | Future services |
 
-## Deployment
-
-Each service is deployed independently.
-
-```bash
-cd <service>
-docker compose up -d
-```
-
-## Prerequisites
+## Usage
 
 All containers connect to a shared external Docker bridge network named `tunnel`.
 
@@ -66,6 +57,13 @@ Each service's `docker-compose.yml` references this network as an external netwo
 networks:
   tunnel:
     external: true
+```
+
+Each service is deployed independently.
+
+```bash
+cd <service>
+docker compose up -d
 ```
 
 ## Notes

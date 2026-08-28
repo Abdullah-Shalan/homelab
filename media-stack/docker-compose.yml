@@ -129,7 +129,7 @@ services:
       - "7575:7575"
     environment:
       TZ: Asia/Riyadh
-      SECRET_ENCRYPTION_KEY: 02aa7154b0c321c6b7dbaf73394944a2cf998fdebd68a1292176b53ff523b79a
+      SECRET_ENCRYPTION_KEY: ${HOMARR_ENCRYPTION_KEY}
     hostname: homarr
     volumes:
       - ./config/homarr:/appdata
