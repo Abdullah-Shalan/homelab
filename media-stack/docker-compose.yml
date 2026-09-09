@@ -2,6 +2,7 @@ services:
   jellyfin:
     image: linuxserver/jellyfin:latest
     container_name: jellyfin
+    restart: unless-stopped
     runtime: nvidia
     environment:
       PUID: "1000"
